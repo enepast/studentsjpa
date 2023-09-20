@@ -26,9 +26,10 @@ public class StudentDAOImpl implements StudentDAO{
 	}
 
 	@Override
-	public void delete(Student theStudent) {
-		// TODO Auto-generated method stub
-		
+	@Transactional
+	public void delete(int id) {
+		Student theStudent = entityManager.find(Student.class, id);
+		entityManager.remove(theStudent);
 	}
 
 	@Override
@@ -53,16 +54,21 @@ public class StudentDAOImpl implements StudentDAO{
 
 	@Override
 	@Transactional
-	public boolean updateStudent(Student theStudent, int id) {
-		Student oldStudent = entityManager.find(Student.class, id);
-		if (oldStudent != null) {
-			oldStudent.setFirstName(theStudent.getFirstName());
-			oldStudent.setLastName(theStudent.getLastName());
-			oldStudent.setEmail(theStudent.getEmail());
-			entityManager.merge(oldStudent);
-			return true;
-		}
-		return false;
+	public int updateLastName(String lastName, int id) {
+		String theQuery = "UPDATE Student SET lastName=:valueLastName WHERE id=:valueId" ;
+		int numRowsUpdated = entityManager.createQuery(theQuery)
+				.setParameter("valueLastName", lastName)
+				.setParameter("valueId", id)
+				.executeUpdate();
+		return numRowsUpdated;
+		
+	}
+
+	@Override
+	@Transactional
+	public Student anotherUpdateLastName(Student theStudent) {
+		Student resultStudent = entityManager.merge(theStudent);
+		return resultStudent;
 	}
 	
 	

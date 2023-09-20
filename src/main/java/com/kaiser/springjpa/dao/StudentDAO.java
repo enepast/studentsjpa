@@ -8,7 +8,7 @@ public interface StudentDAO {
 	
 	void save(Student theStudent);
 
-	void delete(Student theStudent);
+	void delete(int id);
 	
 	Student findById(int id);
 
@@ -16,5 +16,7 @@ public interface StudentDAO {
 	
 	List<Student> findAll();
 	
-	boolean updateStudent(Student theStudent, int id);
+	int updateLastName(String lastName, int id);
+
+	Student anotherUpdateLastName(Student theStudent);
 	}

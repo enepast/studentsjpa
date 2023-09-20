@@ -20,7 +20,6 @@ public class SpringJpaApplication {
 	@Bean
 	public CommandLineRunner commandLineRunner(StudentDAOImpl studentDAO) {
 		return runner -> {
-			findAll(studentDAO);
 		};
 	}
 	
@@ -54,13 +53,20 @@ public class SpringJpaApplication {
 		students.stream().forEach(student -> System.out.println(student.toString()));
 	}
 	
-	private void updateStudent(StudentDAOImpl studentDAO, Student theStudent, int id) {
-		boolean flag = studentDAO.updateStudent(theStudent, id);
-		if(flag == true) {
-			System.out.printf("Student id: %d updated", id);
-		} else {
-			System.out.println("Student id doesn't match with a student in the database");
-		}
+	private void updateLastName(StudentDAOImpl studentDAO, String lastName, int id) {
+		int result = studentDAO.updateLastName(lastName, id);
+		System.out.printf("Number of students modified: %d%n", result);
+	}
+	
+	public Student anotherUpdateLastName(StudentDAOImpl studentDAO, String lastName, int id) {
+		Student oldStudent = studentDAO.findById(id);
+		oldStudent.setLastName(lastName);
+		return studentDAO.anotherUpdateLastName(oldStudent);
+	}
+	
+	public void delete(StudentDAOImpl studentDAO, int id) {
+		studentDAO.delete(id);
+		System.out.printf("Student id: %d deleted%n", id);
 	}
 
 }
